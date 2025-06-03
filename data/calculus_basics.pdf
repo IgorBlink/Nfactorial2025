@@ -1,0 +1,126 @@
+# Calculus Basics - Study Material
+
+## Chapter 1: Introduction to Calculus
+
+### What is Calculus?
+Calculus is a branch of mathematics that deals with continuous change. It has two main branches:
+- **Differential Calculus**: Studies rates of change (derivatives)
+- **Integral Calculus**: Studies accumulation of quantities (integrals)
+
+### Historical Context
+Calculus was developed independently by Isaac Newton and Gottfried Wilhelm Leibniz in the 17th century.
+
+## Chapter 2: Limits and Continuity
+
+### Definition of a Limit
+The limit of a function f(x) as x approaches a value a is the value that f(x) gets arbitrarily close to as x gets arbitrarily close to a.
+
+Notation: lim[x→a] f(x) = L
+
+### Properties of Limits
+1. **Sum Rule**: lim[x→a] (f(x) + g(x)) = lim[x→a] f(x) + lim[x→a] g(x)
+2. **Product Rule**: lim[x→a] (f(x) × g(x)) = lim[x→a] f(x) × lim[x→a] g(x)
+3. **Quotient Rule**: lim[x→a] (f(x)/g(x)) = lim[x→a] f(x) / lim[x→a] g(x), provided lim[x→a] g(x) ≠ 0
+
+### Continuity
+A function f(x) is continuous at x = a if:
+1. f(a) is defined
+2. lim[x→a] f(x) exists
+3. lim[x→a] f(x) = f(a)
+
+## Chapter 3: Derivatives
+
+### Definition of Derivative
+The derivative of a function f(x) at point x is defined as:
+f'(x) = lim[h→0] (f(x+h) - f(x))/h
+
+### Common Derivative Rules
+1. **Power Rule**: d/dx(x^n) = nx^(n-1)
+2. **Product Rule**: d/dx(uv) = u'v + uv'
+3. **Quotient Rule**: d/dx(u/v) = (u'v - uv')/v²
+4. **Chain Rule**: d/dx(f(g(x))) = f'(g(x)) × g'(x)
+
+### Applications of Derivatives
+- Finding rates of change
+- Optimization problems
+- Related rates
+- Linear approximation
+
+## Chapter 4: Integrals
+
+### Definite vs Indefinite Integrals
+
+#### Indefinite Integral
+An indefinite integral represents a family of functions whose derivative is the given function.
+∫ f(x) dx = F(x) + C, where F'(x) = f(x) and C is the constant of integration.
+
+#### Definite Integral
+A definite integral represents the signed area under a curve between two specific points.
+∫[a to b] f(x) dx = F(b) - F(a), where F'(x) = f(x)
+
+### Fundamental Theorem of Calculus
+The Fundamental Theorem of Calculus connects derivatives and integrals:
+
+**Part 1**: If f is continuous on [a,b] and F(x) = ∫[a to x] f(t) dt, then F'(x) = f(x)
+
+**Part 2**: If f is continuous on [a,b] and F is any antiderivative of f, then ∫[a to b] f(x) dx = F(b) - F(a)
+
+### Integration Techniques
+1. **Substitution**: Used when the integrand contains a function and its derivative
+2. **Integration by Parts**: ∫ u dv = uv - ∫ v du
+3. **Partial Fractions**: For rational functions
+4. **Trigonometric Substitution**: For integrals involving √(a² - x²), √(a² + x²), or √(x² - a²)
+
+## Chapter 5: Important Theorems
+
+### Mean Value Theorem
+If f is continuous on [a,b] and differentiable on (a,b), then there exists at least one point c in (a,b) such that:
+f'(c) = (f(b) - f(a))/(b - a)
+
+**Geometric Interpretation**: There exists at least one point where the tangent line is parallel to the secant line connecting the endpoints.
+
+### Rolle's Theorem
+If f is continuous on [a,b], differentiable on (a,b), and f(a) = f(b), then there exists at least one point c in (a,b) such that f'(c) = 0.
+
+### Intermediate Value Theorem
+If f is continuous on [a,b] and k is any value between f(a) and f(b), then there exists at least one point c in [a,b] such that f(c) = k.
+
+## Chapter 6: Applications
+
+### Optimization Problems
+Steps to solve optimization problems:
+1. Identify the quantity to be optimized
+2. Express this quantity as a function of one variable
+3. Find the critical points by setting the derivative equal to zero
+4. Test critical points and endpoints to find maximum or minimum
+
+### Related Rates
+Problems involving rates of change of related quantities:
+1. Identify all variables and their relationships
+2. Write an equation relating the variables
+3. Differentiate both sides with respect to time
+4. Substitute known values and solve
+
+### Area and Volume Applications
+- Area between curves: ∫[a to b] |f(x) - g(x)| dx
+- Volume by disk method: V = π∫[a to b] [R(x)]² dx
+- Volume by washer method: V = π∫[a to b] ([R(x)]² - [r(x)]²) dx
+- Volume by shell method: V = 2π∫[a to b] x × f(x) dx
+
+## Practice Problems
+
+### Problem Set 1: Limits
+1. Find lim[x→2] (x² - 4)/(x - 2)
+2. Evaluate lim[x→∞] (3x² + 2x)/(2x² - x + 1)
+
+### Problem Set 2: Derivatives
+1. Find the derivative of f(x) = x³ - 2x² + 5x - 1
+2. Use the chain rule to find d/dx[sin(x²)]
+
+### Problem Set 3: Integrals
+1. Evaluate ∫ (2x + 3) dx
+2. Find ∫[0 to 1] x² dx
+
+### Problem Set 4: Applications
+1. Find the maximum value of f(x) = -x² + 4x + 3 on the interval [0, 5]
+2. A ladder 10 feet long leans against a wall. If the bottom of the ladder slides away from the wall at 2 ft/s, how fast is the top sliding down when the bottom is 6 feet from the wall? 
