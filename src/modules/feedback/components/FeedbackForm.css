@@ -1,0 +1,198 @@
+.feedback-form {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin: 0 auto 2rem auto;
+  max-width: 600px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.form-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.form-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.form-header p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+.form-content {
+  padding: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  font-size: 1rem;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.form-select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  background: white;
+  color: #1f2937;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem;
+  padding-right: 3rem;
+  box-sizing: border-box;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-select:hover {
+  border-color: #d1d5db;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1f2937;
+  resize: vertical;
+  min-height: 120px;
+  transition: all 0.2s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.form-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-textarea:hover {
+  border-color: #d1d5db;
+}
+
+.form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.submit-button {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submit-button:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.submit-button span {
+  font-size: 1.2rem;
+}
+
+/* Темная тема */
+[data-theme="dark"] .feedback-form {
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  border-color: #374151;
+}
+
+[data-theme="dark"] .form-content {
+  background: transparent;
+}
+
+[data-theme="dark"] .form-label {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .form-textarea {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .form-select:focus,
+[data-theme="dark"] .form-textarea:focus {
+  border-color: #667eea;
+  background: #4b5563;
+}
+
+[data-theme="dark"] .form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .feedback-form {
+    margin: 0 auto 2rem auto;
+    max-width: 100%;
+    width: calc(100% - 2rem);
+  }
+  
+  .form-header {
+    padding: 1.5rem;
+  }
+  
+  .form-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+} 

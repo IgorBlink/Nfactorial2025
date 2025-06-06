@@ -1,0 +1,65 @@
+.feedback-controls {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.controls-header h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.controls-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-group label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.control-group select {
+  padding: 0.75rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: white;
+  color: #1f2937;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.control-group select:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+/* Темная тема */
+[data-theme="dark"] .control-group select {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .control-group select:focus {
+  border-color: #4f46e5;
+}
+
+@media (max-width: 768px) {
+  .controls-row {
+    grid-template-columns: 1fr;
+  }
+} 
