@@ -11,8 +11,12 @@ if __name__ == "__main__":
         print(f"Warning: Invalid PORT value '{port_env}', using default 8000")
         port = 8000
     
-    print(f"Starting server on port {port}")
-    print(f"Environment PORT: {os.environ.get('PORT', 'Not set')}")
+    print(f"🚀 Starting server on port {port}")
+    print(f"📊 Environment variables:")
+    print(f"   PORT: {os.environ.get('PORT', 'Not set')}")
+    print(f"   DATABASE_URL: {'Set' if os.environ.get('DATABASE_URL') else 'Not set'}")
+    print(f"   RAILWAY_ENVIRONMENT: {os.environ.get('RAILWAY_ENVIRONMENT', 'Not set')}")
+    print(f"   SECRET_KEY: {'Set' if os.environ.get('SECRET_KEY') else 'Not set'}")
     
     uvicorn.run(
         "src.main:app",
