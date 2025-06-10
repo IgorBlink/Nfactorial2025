@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from contextlib import asynccontextmanager
 import logging
+import os
 
 from .config import settings
 from .database import engine
@@ -58,6 +61,18 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy", "database": settings.database_url}
+
+
+# Serve static files and frontend
+static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    
+    @app.get("/frontend")
+    async def serve_frontend():
+        """Serve the frontend HTML file"""
+        frontend_path = os.path.join(static_dir, "index.html")
+        return FileResponse(frontend_path)
 
 
 # Include routers
