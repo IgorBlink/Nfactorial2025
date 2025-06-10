@@ -91,4 +91,16 @@ async def get_me(current_user: User = Depends(get_current_active_user)):
 @router.get("/test")
 async def test_endpoint():
     """Test endpoint to check if API is working"""
-    return {"status": "OK", "message": "Auth API is working"} 
+    return {"status": "OK", "message": "Auth API is working"}
+
+
+@router.get("/status") 
+async def auth_status():
+    """Check auth system status"""
+    import os
+    return {
+        "auth_ready": True,
+        "database_url_set": bool(os.getenv("DATABASE_URL")),
+        "secret_key_set": bool(os.getenv("SECRET_KEY")),
+        "message": "Auth system operational"
+    } 

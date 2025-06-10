@@ -19,16 +19,8 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Create tables on startup
-    try:
-        print("🔄 Creating database tables...")
-        engine = get_engine()  # This will create engine with proper config
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        print("✅ Database tables created successfully")
-    except Exception as e:
-        print(f"❌ Error creating database tables: {e}")
-        print("⚠️  App will continue but database operations may fail")
+    # App startup - skip database initialization for now
+    print("🚀 Application starting...")
     yield
 
 
@@ -57,6 +49,55 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
+
+
+@app.get("/db-status")
+async def database_status():
+    """Check database connection status"""
+    import os
+    
+    database_url = os.getenv("DATABASE_URL")
+    result = {
+        "database_url_set": bool(database_url),
+        "secret_key_set": bool(os.getenv("SECRET_KEY")),
+        "connection_status": "unknown"
+    }
+    
+    if not database_url:
+        result["connection_status"] = "no_url"
+        result["message"] = "DATABASE_URL not set - add PostgreSQL service in Railway"
+        return result
+    
+    try:
+        from .database import get_engine
+        engine = get_engine()
+        async with engine.begin() as conn:
+            await conn.execute("SELECT 1")
+        result["connection_status"] = "connected"
+        result["message"] = "Database connection successful"
+    except Exception as e:
+        result["connection_status"] = "failed"
+        result["message"] = f"Database connection failed: {str(e)[:100]}"
+    
+    return result
+
+
+@app.post("/init-db")
+async def initialize_database():
+    """Initialize database tables (call this after fixing database connection)"""
+    try:
+        from .database import get_engine
+        from .models import Base
+        
+        print("🔄 Creating database tables...")
+        engine = get_engine()
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        print("✅ Database tables created successfully")
+        return {"status": "success", "message": "Database initialized"}
+    except Exception as e:
+        print(f"❌ Error creating database tables: {e}")
+        return {"status": "error", "message": f"Database initialization failed: {str(e)[:100]}"}
 
 
 # Serve static files and frontend
