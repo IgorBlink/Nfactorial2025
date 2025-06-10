@@ -32,21 +32,26 @@ class Settings(BaseSettings):
     
     @property
     def database_url(self) -> str:
-        # Production: use DATABASE_URL if provided
+        # Production: use DATABASE_URL if provided (Railway/Render style)
         if self.database_url_override:
             # Railway/Render provide postgres:// but we need postgresql://
             url = self.database_url_override
             if url.startswith("postgres://"):
                 url = url.replace("postgres://", "postgresql://", 1)
             # Add asyncpg driver if not present
-            if "+asyncpg" not in url:
+            if "+asyncpg" not in url and "postgresql://" in url:
                 url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            print(f"Using production database URL: {url[:50]}...")
             return url
         
         # Development: SQLite or local PostgreSQL
         if self.use_sqlite:
+            print("Using SQLite database for development")
             return "sqlite+aiosqlite:///./test.db"
-        return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
+        
+        db_url = f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
+        print(f"Using local PostgreSQL: {self.postgres_host}:{self.postgres_port}")
+        return db_url
 
 
 settings = Settings()
