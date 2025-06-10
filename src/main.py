@@ -7,7 +7,7 @@ import logging
 import os
 
 from .config import settings
-from .database import engine
+from .database import get_engine
 from .models import Base
 from .tasks.api import router as tasks_router
 from .auth_api import router as auth_router
@@ -22,6 +22,7 @@ async def lifespan(app: FastAPI):
     # Create tables on startup
     try:
         print("🔄 Creating database tables...")
+        engine = get_engine()  # This will create engine with proper config
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         print("✅ Database tables created successfully")
