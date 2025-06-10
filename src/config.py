@@ -4,22 +4,20 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     name: str = "Task Manager"
-    secret_key: str = os.getenv("SECRET_KEY", "fallback-secret-123")
+    secret_key: str = os.getenv("SECRET_KEY", "local-dev-secret-key-123456789")
     algorithm: str = "HS256" 
     access_token_expire_minutes: int = 30
     
     @property
     def database_url(self) -> str:
-        database_url = os.getenv("DATABASE_URL")
-        if not database_url:
-            return "postgresql+asyncpg://postgres:postgres@localhost:5432/postgres"
+        # Use SQLite database
+        # In production (Railway), store database in /app/data
+        # Locally, store in current directory
+        default_db = "sqlite+aiosqlite:///./tasks.db"
+        if os.getenv("RAILWAY_ENVIRONMENT"):
+            default_db = "sqlite+aiosqlite:///app/data/tasks.db"
             
-        # Fix Railway postgres:// URLs
-        if database_url.startswith("postgres://"):
-            database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
-        elif "postgresql://" in database_url and "+asyncpg" not in database_url:
-            database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            
+        database_url = os.getenv("DATABASE_URL", default_db)
         return database_url
 
 

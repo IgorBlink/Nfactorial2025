@@ -67,9 +67,8 @@ ehthumbs.db
 Thumbs.db
 
 # Database
-*.db
-*.sqlite3
 test.db
+# Keep tasks.db for SQLite
 
 # Logs
 *.log

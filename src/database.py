@@ -9,8 +9,12 @@ def get_engine():
     global engine, async_session_maker
     if engine is None:
         from .config import settings
-        print("🔗 Creating database engine...")
-        engine = create_async_engine(settings.database_url, echo=True)
+        print("🔗 Creating SQLite database engine...")
+        engine = create_async_engine(
+            settings.database_url, 
+            echo=True,
+            connect_args={"check_same_thread": False}  # SQLite specific
+        )
         async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
     return engine
 
