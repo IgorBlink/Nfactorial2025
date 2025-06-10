@@ -20,14 +20,8 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Create tables on startup
-    try:
-        logger.info(f"Creating database tables using {settings.database_url}")
-        async with engine.begin() as conn:
-            await conn.run_sync(Base.metadata.create_all)
-        logger.info("Database tables created successfully")
-    except Exception as e:
-        logger.error(f"Error creating database tables: {e}")
-        raise
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
     yield
 
 
@@ -50,17 +44,12 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    db_type = "SQLite" if settings.use_sqlite else "PostgreSQL"
-    return {
-        "message": f"Welcome to {settings.name}",
-        "database": db_type,
-        "docs": "/docs"
-    }
+    return {"message": f"Welcome to {settings.name}", "docs": "/docs"}
 
 
 @app.get("/health")
 def health_check():
-    return {"status": "healthy", "database": settings.database_url}
+    return {"status": "healthy"}
 
 
 # Serve static files and frontend
