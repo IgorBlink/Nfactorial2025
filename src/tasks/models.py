@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 
 # User models
@@ -12,24 +12,22 @@ class UserCreate(BaseModel):
 
 
 class UserInDB(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     username: str
     email: str
     is_active: bool
     created_at: datetime
-    
-    class Config:
-        from_attributes = True
 
 
 class User(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     username: str
     email: str
     is_active: bool
-    
-    class Config:
-        from_attributes = True
 
 
 # Task models
@@ -47,6 +45,8 @@ class TaskUpdate(BaseModel):
 
 
 class Task(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
     id: int
     title: str
     description: str
@@ -55,9 +55,6 @@ class Task(BaseModel):
     created_at: datetime
     updated_at: datetime
     owner_id: int
-    
-    class Config:
-        from_attributes = True
 
 
 # Auth models
