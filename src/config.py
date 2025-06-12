@@ -25,10 +25,16 @@ class Settings(BaseSettings):
     # For development - use PostgreSQL by default as required
     use_sqlite: bool = os.getenv("USE_SQLITE", "false").lower() == "true"
     
+    # Redis
+    redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    
     # JWT
     secret_key: str = os.getenv("SECRET_KEY", "your-secret-key-change-this")
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    
+    # Cache settings
+    cache_ttl: int = 300  # 5 minutes
     
     @property
     def database_url(self) -> str:

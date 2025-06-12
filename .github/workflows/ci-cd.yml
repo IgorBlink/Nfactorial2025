@@ -25,6 +25,16 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v4
     
@@ -45,6 +55,7 @@ jobs:
         echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
         echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
         echo "POSTGRES_DB=postgres" >> $GITHUB_ENV
+        echo "REDIS_URL=redis://localhost:6379/0" >> $GITHUB_ENV
         echo "SECRET_KEY=test-secret-key-for-ci" >> $GITHUB_ENV
     
     - name: Run tests
@@ -56,6 +67,8 @@ jobs:
         uvicorn src.main:app --host 0.0.0.0 --port 8000 &
         sleep 10
         curl -f http://localhost:8000/ || exit 1
+        curl -f http://localhost:8000/health || exit 1
+        curl -f http://localhost:8000/cache/status || exit 1
         pkill -f uvicorn
 
   build:
@@ -74,11 +87,21 @@ jobs:
     
     - name: Test Docker container
       run: |
-        docker run -d -p 8000:8000 --name test-app task-manager:${{ github.sha }}
+        # Start Redis for testing
+        docker run -d --name redis-test -p 6379:6379 redis:7-alpine
+        
+        # Start the application
+        docker run -d -p 8000:8000 --name test-app \
+          -e REDIS_URL=redis://host.docker.internal:6379/0 \
+          task-manager:${{ github.sha }}
+        
         sleep 15
         curl -f http://localhost:8000/ || exit 1
-        docker stop test-app
-        docker rm test-app
+        curl -f http://localhost:8000/health || exit 1
+        
+        # Cleanup
+        docker stop test-app redis-test
+        docker rm test-app redis-test
 
   security:
     runs-on: ubuntu-latest
