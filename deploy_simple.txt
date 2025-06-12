@@ -1,0 +1,75 @@
+# Минимальное развертывание Task Manager на сервере
+
+## 1. Подготовка системы
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y python3.11 python3.11-venv python3-pip postgresql postgresql-contrib redis-server git
+
+## 2. Настройка PostgreSQL
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+sudo -u postgres createuser -s taskmanager
+sudo -u postgres createdb taskmanager -O taskmanager
+
+## 3. Настройка Redis
+sudo systemctl start redis-server
+sudo systemctl enable redis-server
+
+## 4. Клонирование и настройка приложения
+git clone https://github.com/your-repo/task-manager.git /opt/taskmanager
+cd /opt/taskmanager
+python3.11 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+## 5. Создание .env файла
+cat > .env << EOF   
+SECRET_KEY=your-super-secret-key-change-this
+POSTGRES_USER=taskmanager
+POSTGRES_PASSWORD=
+POSTGRES_DB=taskmanager
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+REDIS_URL=redis://localhost:6379/0
+USE_SQLITE=false
+EOF
+
+## 6. Запуск приложения (в разных терминалах)
+
+# Терминал 1 - FastAPI
+source venv/bin/activate
+uvicorn src.main:app --host 0.0.0.0 --port 8000
+
+# Терминал 2 - Celery Worker
+source venv/bin/activate
+celery -A src.celery_app worker --loglevel=info
+
+# Терминал 3 - Celery Beat
+source venv/bin/activate
+celery -A src.celery_app beat --loglevel=info
+
+# Терминал 4 - Flower (опционально)
+source venv/bin/activate
+celery -A src.celery_app flower --port=5555
+
+## 7. Проверка
+curl http://localhost:8000/
+curl http://localhost:8000/health
+curl http://localhost:5555  # Flower UI
+
+## Для фонового запуска используйте screen или tmux:
+# screen -S api
+# uvicorn src.main:app --host 0.0.0.0 --port 8000
+# Ctrl+A, D (отключиться от screen)
+
+# screen -S worker
+# celery -A src.celery_app worker --loglevel=info
+# Ctrl+A, D
+
+# screen -S beat
+# celery -A src.celery_app beat --loglevel=info
+# Ctrl+A, D
+
+## Полезные команды screen:
+# screen -ls  # список сессий
+# screen -r api  # подключиться к сессии api
+# screen -X -S api quit  # закрыть сессию api 

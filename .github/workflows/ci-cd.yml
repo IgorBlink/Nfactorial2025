@@ -28,7 +28,7 @@ jobs:
       redis:
         image: redis:7-alpine
         ports:
-          - 6379:6379
+          - 6368:6379
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -55,7 +55,7 @@ jobs:
         echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
         echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
         echo "POSTGRES_DB=postgres" >> $GITHUB_ENV
-        echo "REDIS_URL=redis://localhost:6379/0" >> $GITHUB_ENV
+        echo "REDIS_URL=redis://localhost:6368/0" >> $GITHUB_ENV
         echo "SECRET_KEY=test-secret-key-for-ci" >> $GITHUB_ENV
     
     - name: Run tests
@@ -88,11 +88,11 @@ jobs:
     - name: Test Docker container
       run: |
         # Start Redis for testing
-        docker run -d --name redis-test -p 6379:6379 redis:7-alpine
+        docker run -d --name redis-test -p 6368:6379 redis:7-alpine
         
         # Start the application
         docker run -d -p 8000:8000 --name test-app \
-          -e REDIS_URL=redis://host.docker.internal:6379/0 \
+          -e REDIS_URL=redis://host.docker.internal:6368/0 \
           task-manager:${{ github.sha }}
         
         sleep 15

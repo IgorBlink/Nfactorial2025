@@ -1,0 +1,98 @@
+# Развертывание Task Manager через Docker Compose
+
+## 1. Установка Docker и Docker Compose
+# Ubuntu/Debian
+sudo apt update
+sudo apt install -y apt-transport-https ca-certificates curl gnupg lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Добавить пользователя в группу docker
+sudo usermod -aG docker $USER
+newgrp docker
+
+## 2. Клонирование проекта
+git clone https://github.com/your-repo/task-manager.git
+cd task-manager
+
+## 3. Создание .env файла (если нужно переопределить настройки)
+cat > .env << EOF
+SECRET_KEY=your-super-secret-key-for-production
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=postgres
+POSTGRES_HOST=db
+REDIS_URL=redis://redis:6379/0
+EOF
+
+## 4. Запуск всего стека одной командой
+docker compose up -d
+
+## 5. Проверка статуса
+docker compose ps
+docker compose logs app
+docker compose logs celery-worker
+docker compose logs celery-beat
+
+## 6. Проверка работы
+curl http://localhost:8000/
+curl http://localhost:8000/health
+curl http://localhost:5555  # Flower UI
+
+## 7. Полезные команды для управления
+
+# Остановить все сервисы
+docker compose down
+
+# Остановить с удалением данных
+docker compose down -v
+
+# Перезапустить только API
+docker compose restart app
+
+# Посмотреть логи в реальном времени
+docker compose logs -f app
+
+# Посмотреть логи конкретного сервиса
+docker compose logs -f celery-worker
+
+# Зайти внутрь контейнера
+docker compose exec app bash
+
+# Пересобрать образы после изменений в коде
+docker compose build
+docker compose up -d
+
+# Посмотреть использование ресурсов
+docker stats
+
+# Очистить неиспользуемые образы и контейнеры
+docker system prune -f
+
+## 8. Обновление приложения
+git pull
+docker compose build
+docker compose up -d
+
+## 9. Бэкап базы данных
+docker compose exec db pg_dump -U postgres postgres > backup.sql
+
+## 10. Восстановление базы данных
+docker compose exec -T db psql -U postgres postgres < backup.sql
+
+## Что включает docker-compose.yml:
+# - app: FastAPI приложение на порту 8000
+# - db: PostgreSQL база данных на порту 5432
+# - redis: Redis кэш на порту 6379
+# - celery-worker: Фоновые задачи
+# - celery-beat: Планировщик задач
+# - flower: Мониторинг Celery на порту 5555
+
+## Преимущества Docker Compose:
+# - Все сервисы запускаются одной командой
+# - Автоматическое создание сети между контейнерами
+# - Persistent volumes для данных PostgreSQL и Redis
+# - Легкое масштабирование и обновление
+# - Изолированная среда выполнения 
