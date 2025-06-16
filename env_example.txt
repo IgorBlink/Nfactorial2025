@@ -1,0 +1,4 @@
+# Скопируйте этот файл как .env и добавьте ваш API ключ
+GEMINI_API_KEY=your_gemini_api_key_here
+
+# Получить API ключ можно тут: https://ai.google.dev/ 

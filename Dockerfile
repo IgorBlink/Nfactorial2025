@@ -1,16 +1,25 @@
-FROM python:3.11-slim
+# Используем официальный Python образ
+FROM python:3.9-slim
 
+# Устанавливаем рабочую директорию
 WORKDIR /app
 
-# Copy and install Python dependencies
+# Устанавливаем системные зависимости
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# Копируем файл зависимостей
 COPY requirements.txt .
+
+# Устанавливаем Python зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Копируем все файлы приложения
 COPY . .
 
-# Expose port
-EXPOSE 8000
+# Открываем порт
+EXPOSE 8001
 
-# Start command
-CMD ["python", "start.py"]
+# Команда запуска
+CMD ["python", "main.py"] 
